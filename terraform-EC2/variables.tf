@@ -3,14 +3,18 @@ variable "ec2_instance_type" {
   type    = string
 }
 
-variable "ec2_root_storage_size" {
-  default = 8      # change if its windows then 30GB
+variable "ec2_default_root_storage_size" {
+  default = 8 # change if its windows then 30GB
   type    = number
 }
 
 variable "os_type" {
   type    = string
-  default = "amazon-linux"
+  default = "ubuntu" #change this as per OS
+}
+
+variable "env" {
+  default = "dev" # change it to prd when you are in production environment 30 GB size
 }
 
 locals {

@@ -61,15 +61,27 @@ resource "aws_security_group" "my-security-group" {
 }
 
 resource "aws_instance" "my-aws_instance" {
+  # count = 2 # meta argument (will create 2 instances)
+  for_each = tomap({
+    jenkins = "t2.micro"
+    # server  = "t2.micro"
+  }) # meta argument key value
+
+  depends_on = [ aws_security_group.my-security-group, aws_key_pair.my-key ]
+
   key_name        = aws_key_pair.my-key.key_name
   security_groups = [aws_security_group.my-security-group.name]
-  instance_type   = var.ec2_instance_type
+  instance_type   = each.value
   ami             = data.aws_ami.selected.id
-  # user_data = file("user_data.sh")
+  user_data       = file("user_data.sh")
 
   root_block_device {
-    volume_size = var.ec2_root_storage_size
+    volume_size = var.env == "prd" ? 20 : var.ec2_default_root_storage_size
     volume_type = "gp3"
+  }
+
+  tags = {
+    Name = each.key
   }
 
   # instance_market_options {
@@ -81,9 +93,5 @@ resource "aws_instance" "my-aws_instance" {
   #   }
   # }
 
-
-  tags = {
-    Name = "Ubuntu"
-  }
 }
 
