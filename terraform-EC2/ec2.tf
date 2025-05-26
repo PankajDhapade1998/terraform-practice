@@ -84,6 +84,7 @@ resource "aws_instance" "my-aws_instance" {
     Name = each.key
   }
 
+
   # instance_market_options {
   #   market_type = "spot"
 
@@ -94,4 +95,20 @@ resource "aws_instance" "my-aws_instance" {
   # }
 
 }
+
+# resource "aws_instance" "my_imported_instance" {
+#   ami = "unknown"
+#   instance_type = "unknown"
+# }
+
+
+# To import EC2 instance from aws to terraform ,create template
+
+# commands for importing 
+
+# terraform import aws_instance.my_imported_instance i-05ee4ee67830b44ff
+# terraform state list
+# terraform state show aws_instance.my_imported_instance #(will show details of instance)
+
+
 
